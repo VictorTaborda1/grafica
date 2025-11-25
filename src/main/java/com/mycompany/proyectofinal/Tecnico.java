@@ -21,6 +21,10 @@ public class Tecnico extends Persona implements Serializable {
     public void setEspecialidad(String especialidad) {
         this.especialidad = especialidad;
     }
+    @Override
+    public String toString() {
+    return nombre;  
+    }
 
 
     @Override

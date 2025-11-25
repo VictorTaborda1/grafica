@@ -35,6 +35,15 @@ public class SistemaTickets implements Gestionable {
     }
     return null; // Si no encuentra el ticket, devuelve null
     }
+    private ArrayList<Tecnico> tecnicos = new ArrayList<>();
+
+public void agregarTecnico(Tecnico t) {
+    tecnicos.add(t);
+}
+
+public ArrayList<Tecnico> getTecnicos() {
+    return tecnicos;
+}
     
 
 
