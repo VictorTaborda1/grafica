@@ -8,13 +8,17 @@ package com.mycompany.proyectofinal;
  *
  * @author victo
  */
+import javax.swing.JOptionPane;
+
 public class Ventana extends javax.swing.JFrame {
 
     /**
      * Creates new form Ventana
      */
+    
+  
     private SistemaTickets sistema;
-
+    private Ticket t;
 public Ventana(SistemaTickets sistema) {
     initComponents();
     this.sistema = sistema;
@@ -32,18 +36,18 @@ public Ventana(SistemaTickets sistema) {
         jPanel1 = new javax.swing.JPanel();
         RegisInci = new javax.swing.JButton();
         ListaTic = new javax.swing.JButton();
-        GuardArch = new javax.swing.JButton();
+        TicktesAbierts = new javax.swing.JButton();
         AsigTec = new javax.swing.JButton();
         ReportClien = new javax.swing.JButton();
-        CerrarT = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         Salir = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(153, 153, 255));
+        jPanel1.setBackground(new java.awt.Color(240, 240, 240));
 
-        RegisInci.setBackground(new java.awt.Color(255, 0, 0));
+        RegisInci.setBackground(new java.awt.Color(255, 102, 51));
         RegisInci.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         RegisInci.setText("Registrar Incidencias");
         RegisInci.addActionListener(new java.awt.event.ActionListener() {
@@ -52,7 +56,7 @@ public Ventana(SistemaTickets sistema) {
             }
         });
 
-        ListaTic.setBackground(new java.awt.Color(102, 255, 102));
+        ListaTic.setBackground(new java.awt.Color(0, 180, 0));
         ListaTic.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         ListaTic.setText("Listar Tickets");
         ListaTic.addActionListener(new java.awt.event.ActionListener() {
@@ -61,11 +65,11 @@ public Ventana(SistemaTickets sistema) {
             }
         });
 
-        GuardArch.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        GuardArch.setText("Guardar en archivo");
-        GuardArch.addActionListener(new java.awt.event.ActionListener() {
+        TicktesAbierts.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        TicktesAbierts.setText("Tickets Abiertos");
+        TicktesAbierts.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                GuardArchActionPerformed(evt);
+                TicktesAbiertsActionPerformed(evt);
             }
         });
 
@@ -85,14 +89,6 @@ public Ventana(SistemaTickets sistema) {
             }
         });
 
-        CerrarT.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
-        CerrarT.setText("Cerrar Ticket Con Solucion");
-        CerrarT.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                CerrarTActionPerformed(evt);
-            }
-        });
-
         jLabel1.setBackground(new java.awt.Color(255, 255, 255));
         jLabel1.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
         jLabel1.setText("SELECCIONA LA ACCION A REALIZAR ");
@@ -105,52 +101,57 @@ public Ventana(SistemaTickets sistema) {
             }
         });
 
+        jLabel2.setIcon(new javax.swing.ImageIcon("C:\\Users\\victo\\OneDrive\\Documents\\NetBeansProjects\\ProyectoFinal\\src\\main\\imagenes\\Logo tech(1) (1).png")); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(15, 15, 15)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(CerrarT, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(GuardArch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(RegisInci, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(TicktesAbierts, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(RegisInci, javax.swing.GroupLayout.DEFAULT_SIZE, 196, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(AsigTec, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ListaTic, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(ReportClien, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(AsigTec, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(ListaTic, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addGap(20, 20, 20))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(117, 117, 117))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                        .addComponent(jLabel1)
-                        .addGap(76, 76, 76))))
+                    .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(Salir, javax.swing.GroupLayout.PREFERRED_SIZE, 161, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGap(116, 116, 116))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(ReportClien)
+                            .addGap(131, 131, 131))
+                        .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                            .addComponent(jLabel1)
+                            .addGap(69, 69, 69)))))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(77, 77, 77)
+                .addGap(19, 19, 19)
+                .addComponent(jLabel2)
+                .addGap(34, 34, 34)
                 .addComponent(jLabel1)
-                .addGap(38, 38, 38)
+                .addGap(31, 31, 31)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ListaTic)
-                    .addComponent(RegisInci))
-                .addGap(43, 43, 43)
+                    .addComponent(RegisInci)
+                    .addComponent(ListaTic))
+                .addGap(49, 49, 49)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(GuardArch)
+                    .addComponent(TicktesAbierts)
                     .addComponent(AsigTec))
-                .addGap(41, 41, 41)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(ReportClien)
-                    .addComponent(CerrarT))
-                .addGap(41, 41, 41)
+                .addGap(36, 36, 36)
+                .addComponent(ReportClien)
+                .addGap(43, 43, 43)
                 .addComponent(Salir)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(49, 49, 49))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -173,26 +174,27 @@ dialog.setVisible(true);
     }//GEN-LAST:event_ListaTicActionPerformed
 
     private void AsigTecActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_AsigTecActionPerformed
-       // new VentanaAsignarTec(this, true).setVisible(true);
+      AsignarTec v = new AsignarTec(this, true, sistema);
+        v.setVisible(true);
     }//GEN-LAST:event_AsigTecActionPerformed
 
     private void ReportClienActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_ReportClienActionPerformed
-        //new VentanaReportes(this, true).setVisible(true);
+        sistema.generarHistorialClientes();
+        JOptionPane.showMessageDialog(this, "PDF generado correctamente.");
+  
     }//GEN-LAST:event_ReportClienActionPerformed
 
-    private void CerrarTActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarTActionPerformed
-       // new VentanaCerrar(this, true).setVisible(true);
-    }//GEN-LAST:event_CerrarTActionPerformed
-
     private void RegisInciActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_RegisInciActionPerformed
-        VentanaRegistro dialog = new VentanaRegistro(this, true, sistema);
+      
+        VentanaRegistro dialog = new VentanaRegistro(this, true, sistema,t);
 dialog.setVisible(true);
 
     }//GEN-LAST:event_RegisInciActionPerformed
 
-    private void GuardArchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardArchActionPerformed
-     //   new VentanaGuardarArchivo(this, true).setVisible(true);
-    }//GEN-LAST:event_GuardArchActionPerformed
+    private void TicktesAbiertsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_TicktesAbiertsActionPerformed
+  sistema.generarReporteAbiertos();
+    JOptionPane.showMessageDialog(this, "Reporte generado en ticketsPDF/Tickets_Abiertos.pdf");
+    }//GEN-LAST:event_TicktesAbiertsActionPerformed
 
     private void SalirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_SalirActionPerformed
         System.exit(0);
@@ -207,13 +209,13 @@ dialog.setVisible(true);
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton AsigTec;
-    private javax.swing.JButton CerrarT;
-    private javax.swing.JButton GuardArch;
     private javax.swing.JButton ListaTic;
     private javax.swing.JButton RegisInci;
     private javax.swing.JButton ReportClien;
     private javax.swing.JButton Salir;
+    private javax.swing.JButton TicktesAbierts;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JPanel jPanel1;
     // End of variables declaration//GEN-END:variables
 }

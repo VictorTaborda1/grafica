@@ -1,9 +1,14 @@
+
 /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectofinal;
 
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Cell;
+
+import com.itextpdf.layout.properties.UnitValue;
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
 import com.itextpdf.kernel.font.PdfFontFactory;
@@ -11,7 +16,10 @@ import com.itextpdf.kernel.pdf.*;
 import com.itextpdf.layout.*;
 import com.itextpdf.layout.element.*;
 import com.itextpdf.layout.properties.TextAlignment;
-
+import com.itextpdf.layout.properties.HorizontalAlignment;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.io.Serializable;
@@ -104,6 +112,8 @@ public class Ticket implements Serializable {
     public void setCosto(double costo) {
         this.costo = costo;
     }
+    public void setReportante(Persona reportante) {this.reportante = reportante;}
+
     
     
     public void setEstado(String estado) { 
@@ -123,25 +133,74 @@ public void generarPDF() {
         Document document = new Document(pdf);
         PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
         Style boldStyle = new Style().setFont(boldFont).setFontSize(16);
+        // fuentes
+    PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+    PdfFont normal = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+        try {
+            ImageData imgData = ImageDataFactory.create("src/main/imagenes/logo tech(1).png"); 
+            Image logo = new Image(imgData);
+            logo.setWidth(100);
+            logo.setHorizontalAlignment(HorizontalAlignment.CENTER);
+            document.add(logo);
+        } catch (Exception ex) {
+            System.out.println("No se encontró el logo, continuando sin imagen...");
+        }
         document.setTextAlignment(TextAlignment.CENTER);
         document.add(new Paragraph("=== Ticket #" + id + " ===").addStyle(boldStyle));
-        document.add(new Paragraph("Descripción: " + descripcion));
-        document.add(new Paragraph("Prioridad: " + prioridad));
-        document.add(new Paragraph("Estado: " + estado));
-        document.add(new Paragraph("Fecha de creación: " + getFechaCreacionFormato()));
-        document.add(new Paragraph("Fecha de cierre: " + getFechaCierreFormato()));
-        document.add(new Paragraph("Cliente/Reportante: " + reportante.getNombre()));
-        if (tecnicoAsignado != null) {
-            document.add(new Paragraph("Técnico asignado: " 
-                + tecnicoAsignado.getNombre() + " (" + tecnicoAsignado.getEspecialidad() + ")"));
-        }
-        if (solucion != null && !solucion.isEmpty()) {
-            document.add(new Paragraph("Solución: " + solucion));
-        }
-        document.add(new Paragraph("Costo del servicio: $" + costo));
-        document.add(new Paragraph("Departamento: " + departamento.getNombre()));
-        document.add(new Paragraph("--------------------------------------------------"));
-        document.add(new Paragraph("Generado automáticamente por el Sistema de Tickets TechNova Solutions"));
+         // tabla con 2 columnas (anchos en puntos)
+    float[] columnWidths = {150f, 350f};
+    Table tabla = new Table(columnWidths);
+    tabla.setWidth(UnitValue.createPointValue(500f)); // ancho total en puntos
+
+    // fila: Descripción
+    tabla.addCell(new Cell().add(new Paragraph("Descripción:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph(descripcion).setFont(normal)));
+
+    // fila: Prioridad
+    tabla.addCell(new Cell().add(new Paragraph("Prioridad:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph(prioridad).setFont(normal)));
+
+    // fila: Estado
+    tabla.addCell(new Cell().add(new Paragraph("Estado:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph(estado).setFont(normal)));
+
+    // fila: Fecha creación
+    tabla.addCell(new Cell().add(new Paragraph("Fecha de creación:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph(getFechaCreacionFormato()).setFont(normal)));
+
+    // fila: Fecha cierre
+    tabla.addCell(new Cell().add(new Paragraph("Fecha de cierre:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph(getFechaCierreFormato()).setFont(normal)));
+
+        String tipoReportante;
+
+if (reportante instanceof Empleado) {
+    tipoReportante = "Empleado";
+} else if (reportante instanceof Cliente) {
+    tipoReportante = "Cliente";
+} else {
+    tipoReportante = "Reportante";
+}
+
+document.add(new Paragraph(tipoReportante + ": " + reportante.getNombre()));
+        // fila: Técnico
+    tabla.addCell(new Cell().add(new Paragraph("Técnico asignado:").setFont(bold)));
+    String tec = tecnicoAsignado != null ? tecnicoAsignado.getNombre() + " (" + tecnicoAsignado.getEspecialidad() + ")" : "NINGUNO";
+    tabla.addCell(new Cell().add(new Paragraph(tec).setFont(normal)));
+
+    // fila: Solución
+    tabla.addCell(new Cell().add(new Paragraph("Solución:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph(solucion != null ? solucion : "SIN SOLUCIÓN").setFont(normal)));
+
+    // fila: Costo
+    tabla.addCell(new Cell().add(new Paragraph("Costo:").setFont(bold)));
+    tabla.addCell(new Cell().add(new Paragraph("$" + String.format("%.2f", costo)).setFont(normal)));
+
+    // añadir tabla al documento
+    document.add(tabla);
+
+    document.add(new Paragraph("--------------------------------------------------"));
+    document.add(new Paragraph("Generado automáticamente por el Sistema de Tickets TechNova Solutions").setFont(normal));
 
         document.close();
         System.out.println("📄 PDF generado correctamente: " + nombreArchivo);

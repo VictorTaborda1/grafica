@@ -12,6 +12,9 @@ public abstract class Persona {
         this.nombre = nombre;
         this.email = email;
     }
+    public String getTipo() {
+    return this.getClass().getSimpleName(); // devuelve "Cliente" o "Empleado"
+    }
 
     public String getNombre() { return nombre; }
     public String getEmail() { return email; }

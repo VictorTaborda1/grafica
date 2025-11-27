@@ -38,6 +38,7 @@ public class VentanaListar extends javax.swing.JDialog {
         VerDetalle = new javax.swing.JButton();
         Refrescar = new javax.swing.JButton();
         Salir = new javax.swing.JButton();
+        CerrarTicket = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -80,28 +81,37 @@ public class VentanaListar extends javax.swing.JDialog {
             }
         });
 
+        CerrarTicket.setText("Cerrar Ticket");
+        CerrarTicket.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CerrarTicketActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(27, 27, 27)
+                .addComponent(VerDetalle)
+                .addGap(56, 56, 56)
+                .addComponent(CerrarTicket)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 60, Short.MAX_VALUE)
+                .addComponent(Refrescar)
+                .addGap(47, 47, 47))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(128, 128, 128)
                         .addComponent(jLabel1))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(17, 17, 17)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 332, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(184, 184, 184)
+                        .addComponent(Salir))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(143, 143, 143)
-                        .addComponent(Salir)))
-                .addContainerGap(104, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(27, 27, 27)
-                .addComponent(VerDetalle)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(Refrescar)
-                .addGap(96, 96, 96))
+                        .addGap(17, 17, 17)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 339, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -113,10 +123,11 @@ public class VentanaListar extends javax.swing.JDialog {
                 .addGap(34, 34, 34)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(VerDetalle)
-                    .addComponent(Refrescar))
-                .addGap(18, 18, 18)
+                    .addComponent(Refrescar)
+                    .addComponent(CerrarTicket))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
                 .addComponent(Salir)
-                .addContainerGap(38, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -170,14 +181,32 @@ private void cargarTabla() {
             dispose();
     }//GEN-LAST:event_SalirActionPerformed
 
+    private void CerrarTicketActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarTicketActionPerformed
+        int fila = Tickets.getSelectedRow();
+
+    if (fila == -1) {
+        JOptionPane.showMessageDialog(this, "Selecciona un ticket.", "Aviso", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
+
+    int id = (int) Tickets.getValueAt(fila, 0);
+    Ticket t = sistema.buscarTicketPorId(id);
+
+    VentanaCerrar vc = new VentanaCerrar(new JFrame(), true, sistema, t);
+    vc.setVisible(true);
+
+    cargarTabla(); // refresca la tabla
+    }//GEN-LAST:event_CerrarTicketActionPerformed
+
     /**
      * @param args the command line arguments
      */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton CerrarTicket;
     private javax.swing.JButton Refrescar;
     private javax.swing.JButton Salir;
-    private javax.swing.JTable Tickets;
+    public javax.swing.JTable Tickets;
     private javax.swing.JButton VerDetalle;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

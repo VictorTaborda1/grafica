@@ -1,10 +1,18 @@
-/*
+        /*
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
 package com.mycompany.proyectofinal;
 
 import java.util.*;
+
+import com.itextpdf.layout.element.Table;
+import com.itextpdf.layout.element.Cell;
+import com.itextpdf.layout.properties.UnitValue;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.properties.HorizontalAlignment;
 
 import com.itextpdf.io.font.constants.StandardFonts;
 import com.itextpdf.kernel.font.PdfFont;
@@ -21,6 +29,7 @@ import java.time.format.DateTimeFormatter;
 public class SistemaTickets implements Gestionable {
     private ArrayList<Ticket> tickets = new ArrayList<>();// composicion//
      private Empresa empresa = new Empresa();
+     private Persona reportante;
     private Scanner sc = new Scanner(System.in);
 
     public SistemaTickets() {
@@ -184,105 +193,210 @@ private void registrarIncidencia() {
         File carpeta = new File("ticketsPDF");
         if (!carpeta.exists()) carpeta.mkdirs();
         PdfFont bold = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+         PdfFont normal = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+        
+        
+        String destino = "Historial_Clientes.pdf";
 
-        // Crear PDF
-        PdfWriter writer = new PdfWriter("ticketsPDF/Historial_Clientes.pdf");
+        PdfWriter writer = new PdfWriter(destino);
         PdfDocument pdf = new PdfDocument(writer);
         Document doc = new Document(pdf);
 
-        // Encabezado del documento
-        doc.add(new Paragraph("HISTORIAL DE CLIENTES - TechNova Solutions")
-        .setFont(bold)
-        .setTextAlignment(TextAlignment.CENTER)
-        .setFontSize(18));
+        // === LOGO ===
+        String rutaLogo = "src/main/imagenes/logo tech(1).png"; // AJUSTA TU RUTA
+        ImageData data = ImageDataFactory.create(rutaLogo);
+        Image logo = new Image(data).scaleToFit(80, 80);
+        logo.setHorizontalAlignment(HorizontalAlignment.CENTER);
+        doc.add(logo);
 
-        doc.add(new Paragraph("Generado: " + LocalDateTime.now()
-                .format(DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm"))));
-        doc.add(new Paragraph(" ")); // Espacio
+        // === TITULO ===
 
-        boolean hayTickets = false;
+        Paragraph titulo = new Paragraph("Historial de Clientes - TechNova Solutions")
+                .setFont(bold)
+                .setFontSize(18)
+                .setTextAlignment(TextAlignment.CENTER);
 
-        // Recorrer tickets y mostrar por cliente
-        for (Ticket t : tickets) {
-            if (t.getReportante() != null) {
-                hayTickets = true;
-                doc.add(new Paragraph("Cliente: " + t.getReportante().getNombre() +
-                " (" + t.getReportante().getEmail() + ")")
-                .setFont(bold));
+        doc.add(titulo);
+        doc.add(new Paragraph("\n"));
 
-
-                doc.add(new Paragraph("ID Ticket: " + t.getId()));
-                doc.add(new Paragraph("Descripción: " + t.getDescripcion()));
-                doc.add(new Paragraph("Prioridad: " + t.getPrioridad()));
-                doc.add(new Paragraph("Estado: " + t.getEstado()));
-
-                if (t.getSolucion() != null) {
-                    doc.add(new Paragraph("Solución: " + t.getSolucion()));
-                    doc.add(new Paragraph("Costo: $" + t.getCosto()));
-                }
-
-                if (t.getFechaCreacionFormato() != null) {doc.add(new Paragraph("Fecha de creación: "
-                 + t.getFechaCreacionFormato()));
-                }
-
-                if (t.getFechaCierreFormato() != null) {doc.add(new Paragraph("Fecha de cierre: " 
-                + t.getFechaCierreFormato()));
-                }
+        // === TABLA ===
+        // Tabla con dos columnas
+float[] col = {150, 350};
+Table tabla = new Table(UnitValue.createPercentArray(col));
+tabla.setWidth(UnitValue.createPercentValue(100));
+// ENCABEZADOS
+tabla.addCell(new Cell().add(new Paragraph("Campo").setFont(bold)));
+tabla.addCell(new Cell().add(new Paragraph("Valor").setFont(bold)));
 
 
-                doc.add(new Paragraph("--------------------------------------------------"));
-            }
-        }
 
-        if (!hayTickets) {
-            doc.add(new Paragraph("⚠️ No hay tickets registrados para clientes."));
-        }
+// RECORRER TICKETS
+for (Ticket t : this.getTickets()) {
+    if (t.getReportante() != null) {
 
-        doc.close();
+        tabla.addCell(new Cell().add(new Paragraph("Cliente")));
+        tabla.addCell(new Cell().add(new Paragraph(t.getReportante().getNombre())));
+
+        tabla.addCell(new Cell().add(new Paragraph("Email")));
+        tabla.addCell(new Cell().add(new Paragraph(t.getReportante().getEmail())));
+
+        tabla.addCell(new Cell().add(new Paragraph("ID_Ticket")));
+        tabla.addCell(new Cell().add(new Paragraph(String.valueOf(t.getId()))));
+
+        tabla.addCell(new Cell().add(new Paragraph("Descripción")));
+        tabla.addCell(new Cell().add(new Paragraph(t.getDescripcion())));
+
+        tabla.addCell(new Cell().add(new Paragraph("Estado")));
+        tabla.addCell(new Cell().add(new Paragraph(t.getEstado())));
+
+        tabla.addCell(new Cell().add(new Paragraph("Fecha_creación")));
+        tabla.addCell(new Cell().add(new Paragraph(t.getFechaCreacionFormato())));
+        
+        // Fecha cierre
+        tabla.addCell(new Cell().add(new Paragraph("Fecha cierre").setFont(normal)));
+        tabla.addCell(new Cell().add(new Paragraph(t.getFechaCierreFormato()).setFont(normal)));
+        
+        tabla.addCell(new Cell().add(new Paragraph("Técnico").setFont(bold)));
+        tabla.addCell(new Cell().add(new Paragraph( (t.getTecnicoAsignado() != null) 
+            ? t.getTecnicoAsignado().getNombre() : "No asignado").setFont(normal)));
+          
+        tabla.addCell(new Cell().add(new Paragraph("Solución").setFont(bold)));
+        // Celda Solución
+        tabla.addCell(new Cell().add(new Paragraph( (t.getSolucion() != null) ? t.getSolucion() 
+            : "Sin solución" ).setFont(normal)));
+        tabla.addCell(new Cell().add(new Paragraph("Costo").setFont(bold)));
+        tabla.addCell(new Cell().add(new Paragraph("$" + t.getCosto()).setFont(normal)));
+        
+    }
+}
+
+
+
+        doc.add(tabla);
+        
+         
+
+        
+
         System.out.println("📄 Historial generado correctamente: ticketsPDF/Historial_Clientes.pdf");
+        doc.close();
 
     } catch (Exception e) {
         System.out.println("❌ Error al generar historial: " + e.getMessage());
     }
 }
     
-    public void registrarIncidenciaGUI(Cliente cliente, String descripcion, String prioridad, Departamento depto) {
-    Ticket t = new Ticket(descripcion, prioridad, cliente, depto);
+    public Ticket registrarIncidenciaGUI(Persona persona, String descripcion, String prioridad, Departamento depto) {
+    Ticket t = new Ticket(descripcion, prioridad, persona, depto);
     tickets.add(t);
-}
+    return t;}
 
 
     public void generarReporteAbiertos() {
         try {
-            File directorio = new File("ticketsPDF");
-            if (!directorio.exists()) {
-                directorio.mkdirs(); // crea la carpeta si no existe
-                }
-            PdfWriter writer = new PdfWriter("ticketsPDF/Tickets_Abiertos.pdf");
-            PdfDocument pdf = new PdfDocument(writer);
-            Document doc = new Document(pdf);
-        // Fuente en negrita (iText 9)
-                PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+            File outDir = new File("ticketsPDF");
+        if (!outDir.exists()) outDir.mkdirs();
 
-                // Título con fuente negrita y tamaño 16
-                Paragraph titulo = new Paragraph("=== Reporte de Tickets Abiertos ===")
-                        .setFont(boldFont)
-                        .setFontSize(16);
-                doc.add(titulo);
-                doc.add(new Paragraph(" ")); // línea en blanco
-            for (Ticket t : tickets) {
-                if (t.getEstado().equalsIgnoreCase("Abierto")) {
-                    doc.add(new Paragraph("ID: " + t.getId() + " - " + t.getDescripcion() + " (" + t.getPrioridad() + ")"));
-                    doc.add(new Paragraph("Fecha: " + t.getFechaCreacionFormato()));
-                    doc.add(new Paragraph("--------------------------------------"));
+        String ruta = outDir.getPath() + File.separator + "Tickets_Abiertos.pdf";
+
+        // crear PDF
+        PdfWriter writer = new PdfWriter(ruta);
+        PdfDocument pdf = new PdfDocument(writer);
+        Document doc = new Document(pdf);
+
+        // fuentes
+        PdfFont boldFont = PdfFontFactory.createFont(StandardFonts.HELVETICA_BOLD);
+        PdfFont normalFont = PdfFontFactory.createFont(StandardFonts.HELVETICA);
+
+        // título
+        Paragraph titulo = new Paragraph("REPORTE - TICKETS ABIERTOS")
+                .setFont(boldFont)
+                .setFontSize(14)
+                .setTextAlignment(TextAlignment.CENTER);
+        doc.add(titulo);
+        doc.add(new Paragraph(" "));
+
+        // tabla: ID, Descripción, Prioridad, Fecha, Reportante, Técnico, Solución, Costo
+        float[] widths = { 1f, 4f, 1.5f, 2f, 2.5f, 2.0f, 3f, 1.5f };
+        Table tabla = new Table(UnitValue.createPercentArray(widths));
+        tabla.setWidth(UnitValue.createPercentValue(100));
+
+        // encabezados (negrita)
+        tabla.addHeaderCell(new Cell().add(new Paragraph("ID").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Descripción").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Prioridad").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Fecha creación").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Reportante").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Técnico").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Solución").setFont(boldFont)));
+        tabla.addHeaderCell(new Cell().add(new Paragraph("Costo").setFont(boldFont)));
+
+        DateTimeFormatter fmt = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+
+        // recorrer tickets
+        for (Ticket t : this.tickets) {
+            if (!"Abierto".equalsIgnoreCase(t.getEstado())) continue; // solo abiertos
+
+            // ID
+            tabla.addCell(new Cell().add(new Paragraph(String.valueOf(t.getId())).setFont(normalFont)));
+
+            // Descripción (limitar longitud visual si quieres)
+            String desc = t.getDescripcion() == null ? "" : t.getDescripcion();
+            tabla.addCell(new Cell().add(new Paragraph(desc).setFont(normalFont)));
+
+            // Prioridad
+            tabla.addCell(new Cell().add(new Paragraph(t.getPrioridad() == null ? "" : t.getPrioridad()).setFont(normalFont)));
+
+            // Fecha creación (formateada)
+            String fechaCre = t.getFechaCreacionFormato(); // ya tienes método en Ticket
+            tabla.addCell(new Cell().add(new Paragraph(fechaCre).setFont(normalFont)));
+
+            // Reportante (distinguir Cliente/Empleado)
+            String rep = "-";
+            if (t.getReportante() != null) {
+                if (t.getReportante() instanceof Empleado) {
+                    Empleado e = (Empleado) t.getReportante();
+                    rep = "Empleado - " + e.getNombre() + " (" + (e.getDepartamento() != null ? e.getDepartamento() : "-") + ")";
+                } else if (t.getReportante() instanceof Cliente) {
+                    Cliente c = (Cliente) t.getReportante();
+                    rep = "Cliente - " + c.getNombre() + " (" + (c.getEmail() != null ? c.getEmail() : "-") + ")";
+                } else {
+                    rep = t.getReportante().getNombre();
                 }
             }
+            tabla.addCell(new Cell().add(new Paragraph(rep).setFont(normalFont)));
 
-            doc.close();
-            System.out.println("📄 PDF de tickets abiertos generado correctamente.");
-        } catch (Exception e) {
-            System.out.println("❌ Error al generar reporte: " + e.getMessage());
+            // Técnico
+            String tec = t.getTecnicoAsignado() != null ? t.getTecnicoAsignado().getNombre() + " (" + t.getTecnicoAsignado().getEspecialidad() + ")" : "-";
+            tabla.addCell(new Cell().add(new Paragraph(tec).setFont(normalFont)));
+
+            // Solución (si no existe poner '-')
+            String sol = (t.getSolucion() != null && !t.getSolucion().isEmpty()) ? t.getSolucion() : "-";
+            tabla.addCell(new Cell().add(new Paragraph(sol).setFont(normalFont)));
+
+            // Costo (formateado)
+            String costoStr = String.format("$%.2f", t.getCosto());
+            tabla.addCell(new Cell().add(new Paragraph(costoStr).setFont(normalFont)));
         }
+
+        // si la tabla quedó vacía (sin filas) puedes añadir mensaje
+        if (tabla.getNumberOfRows() <= 0) { // sólo encabezado
+            doc.add(new Paragraph("No hay tickets abiertos actualmente.").setFont(normalFont));
+        } else {
+            doc.add(tabla);
+        }
+
+        doc.add(new Paragraph("\nGenerado automáticamente por TechNova Solutions").setFont(normalFont).setFontSize(9));
+        doc.close();
+
+        System.out.println("📄 PDF de tickets abiertos generado: " + ruta);
+
+    } catch (Exception e) {
+        System.out.println("❌ Error al generar reporte: " + e.getMessage());
+        e.printStackTrace();
+    }
+
+        
     }
 
 

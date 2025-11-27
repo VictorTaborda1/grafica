@@ -14,11 +14,14 @@ public class VentanaRegistro extends javax.swing.JDialog {
     /**
      * Creates new form VentanaRegistro
      */
+    private Ticket reportante;
     private SistemaTickets sistema;
-    public VentanaRegistro(java.awt.Frame parent, boolean modal,SistemaTickets sistema) {
+    private Ticket ticket;
+    public VentanaRegistro(java.awt.Frame parent, boolean modal,SistemaTickets sistema,  Ticket ticket) {
         super(parent, modal);
         initComponents();
         this.sistema = sistema;
+        this.ticket = ticket;
     }
 
     /**
@@ -37,7 +40,7 @@ public class VentanaRegistro extends javax.swing.JDialog {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        jComboBox1 = new javax.swing.JComboBox<>();
+        cbReportanteTipo = new javax.swing.JComboBox<>();
         txtNombre = new javax.swing.JTextField();
         txtEmail = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
@@ -49,6 +52,7 @@ public class VentanaRegistro extends javax.swing.JDialog {
         Guardar = new javax.swing.JButton();
         jLabel7 = new javax.swing.JLabel();
         cbDepartamento = new javax.swing.JComboBox<>();
+        jLabel8 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -75,10 +79,10 @@ public class VentanaRegistro extends javax.swing.JDialog {
 
         jLabel3.setText("Tipo reportante:");
 
-        jComboBox1.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cliente 1", "Iempleado2" }));
-        jComboBox1.addActionListener(new java.awt.event.ActionListener() {
+        cbReportanteTipo.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Cliente", "Empleado" }));
+        cbReportanteTipo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jComboBox1ActionPerformed(evt);
+                cbReportanteTipoActionPerformed(evt);
             }
         });
 
@@ -126,6 +130,8 @@ public class VentanaRegistro extends javax.swing.JDialog {
             }
         });
 
+        jLabel8.setIcon(new javax.swing.ImageIcon("C:\\Users\\victo\\OneDrive\\Documents\\NetBeansProjects\\ProyectoFinal\\src\\main\\imagenes\\descarga (2).png")); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -138,7 +144,7 @@ public class VentanaRegistro extends javax.swing.JDialog {
                             .addComponent(jLabel2, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel4)
                             .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 85, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 43, Short.MAX_VALUE)
+                        .addGap(18, 18, Short.MAX_VALUE)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(txtNombre, javax.swing.GroupLayout.DEFAULT_SIZE, 108, Short.MAX_VALUE)
                             .addComponent(txtDescripcion)
@@ -150,29 +156,37 @@ public class VentanaRegistro extends javax.swing.JDialog {
                                 .addComponent(Guardar)
                                 .addGap(30, 30, 30))
                             .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGap(39, 39, 39)
+                                .addGap(36, 36, 36)
                                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                                     .addComponent(jLabel5, javax.swing.GroupLayout.PREFERRED_SIZE, 55, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(jLabel7))
-                                .addGap(23, 23, 23)))
+                                    .addComponent(jLabel7)
+                                    .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(26, 26, 26)))
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(jComboBox1, 0, 108, Short.MAX_VALUE)
+                            .addComponent(cbReportanteTipo, 0, 108, Short.MAX_VALUE)
                             .addComponent(Cancelar, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addComponent(cbPrioridad, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(cbDepartamento, 0, 1, Short.MAX_VALUE))))
-                .addGap(0, 97, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(160, Short.MAX_VALUE)
+                .addGap(21, 21, 21)
+                .addComponent(jLabel8, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addGap(71, 71, 71))
         );
         jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(38, 38, 38)
-                .addComponent(jLabel6)
-                .addGap(50, 50, 50)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jLabel6)
+                        .addGap(50, 50, 50))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jLabel8)
+                        .addGap(18, 18, 18)))
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
                     .addComponent(txtNombre, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -191,12 +205,12 @@ public class VentanaRegistro extends javax.swing.JDialog {
                 .addGap(18, 18, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(cbReportanteTipo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(13, 13, 13)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(cbDepartamento, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
+                .addGap(18, 28, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(Cancelar)
                     .addComponent(Guardar))
@@ -217,9 +231,9 @@ public class VentanaRegistro extends javax.swing.JDialog {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
+    private void cbReportanteTipoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbReportanteTipoActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jComboBox1ActionPerformed
+    }//GEN-LAST:event_cbReportanteTipoActionPerformed
 
     private void txtNombreActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreActionPerformed
         // TODO add your handling code here:
@@ -231,11 +245,15 @@ public class VentanaRegistro extends javax.swing.JDialog {
 
     private void GuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_GuardarActionPerformed
  try {
+    
         String nombre = txtNombre.getText().trim();
         String email = txtEmail.getText().trim();
         String descripcion = txtDescripcion.getText().trim();
         String prioridad = cbPrioridad.getSelectedItem().toString();
         String departamento = cbDepartamento.getSelectedItem().toString();
+        String tipoReportante = cbReportanteTipo.getSelectedItem().toString();
+        
+      
 
         if (nombre.isEmpty() || email.isEmpty() || descripcion.isEmpty()) {
             JOptionPane.showMessageDialog(this,
@@ -244,16 +262,30 @@ public class VentanaRegistro extends javax.swing.JDialog {
             JOptionPane.ERROR_MESSAGE);
             return;
         }
+        Persona persona;
+        if (tipoReportante.toLowerCase().contains("empleado")) {
+            // si tu clase Empleado tiene constructor (nombre,email,departamento)
+            persona = new Empleado(nombre, email, departamento);
+        } else {
+            // por defecto Cliente
+            persona = new Cliente(nombre, email);
+        }
 
-        Cliente cliente = new Cliente(nombre, email);
         Departamento depto = new Departamento(departamento);
+        
+        Ticket nuevo = sistema.registrarIncidenciaGUI(persona, descripcion, prioridad, depto);
 
-        sistema.registrarIncidenciaGUI(cliente, descripcion, prioridad, depto);
+        int opcion = JOptionPane.showConfirmDialog(this, "¿Generar PDF del ticket?", "PDF", JOptionPane.YES_NO_OPTION);
+        if (opcion == JOptionPane.YES_OPTION) {
+            nuevo.generarPDF();  // ⬅️ Ahora sí existe "nuevo"
+        }
+ 
 
         JOptionPane.showMessageDialog(this,
                 "Ticket registrado correctamente.",
                 "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
+        
 
         dispose(); // cerrar ventana
 
@@ -263,6 +295,7 @@ public class VentanaRegistro extends javax.swing.JDialog {
                 "Error",
                 JOptionPane.ERROR_MESSAGE);
     }
+ 
 
     }//GEN-LAST:event_GuardarActionPerformed
 
@@ -281,8 +314,8 @@ public class VentanaRegistro extends javax.swing.JDialog {
     private javax.swing.JButton Guardar;
     private javax.swing.JComboBox<String> cbDepartamento;
     private javax.swing.JComboBox<String> cbPrioridad;
+    private javax.swing.JComboBox<String> cbReportanteTipo;
     private javax.swing.JButton jButton1;
-    private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -290,6 +323,7 @@ public class VentanaRegistro extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JRadioButton jRadioButton1;
